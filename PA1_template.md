@@ -9,8 +9,8 @@ output:
 #Bryant Gagliardi Course Project 1
 
 Read in the data
-```{r setup, echo = TRUE}
 
+```r
 #Set the working directory
 setwd ("/Users/bryantgagliardi/Documents/data_course/Project_1")
         #read in the data
@@ -19,7 +19,8 @@ setwd ("/Users/bryantgagliardi/Documents/data_course/Project_1")
 
 
 What is mean total number of steps taken per day?
-```{r stepsperday, echo = TRUE}
+
+```r
 # 1. Calculate the total number of steps taken per day:
 #remove NAs for this part of the analysis
 completesteps <- na.omit(stepdata)
@@ -36,7 +37,11 @@ daily_total_steps <- dailysteps$daily_total_steps
         #make a labelled histogram 
         hist(daily_total_steps, main = "Histogram of total steps taken per day",
         xlab = "Number of steps", ylab = "Frequency")
+```
 
+![](PA1_template_files/figure-html/stepsperday-1.png)<!-- -->
+
+```r
 #3. Calculate and report the mean and median of the total number of steps taken 
 #per day:
 #take the mean of all daily step values in the "dailysteps" dataframe"
@@ -45,15 +50,15 @@ rmean <- mean(dailysteps[,"daily_total_steps"])
         rmedian <- median(dailysteps[,"daily_total_steps"])
 ```
 
-The mean number of steps taken per day is `r rmean`, the median number of steps
-is `r rmedian`.
+The mean number of steps taken per day is 1.0766189\times 10^{4}, the median number of steps
+is 10765.
 
 
 
 What is the average daily activity pattern?
 
-```{r activitypattern, echo=TRUE}
 
+```r
 #1.Make a time series plot:
 #summarise and average the steps data by interval, into a dataframe
 intervalsteps <- ddply(completesteps, .(interval), summarize, 
@@ -64,18 +69,23 @@ intervalsteps <- ddply(completesteps, .(interval), summarize,
         #create the timeseries plot
         plot(int, ave_steps, type = "l", main = "Daily activity",
                 xlab = "Interval", ylab = "Average no. steps")
+```
 
+![](PA1_template_files/figure-html/activitypattern-1.png)<!-- -->
+
+```r
 #2. Which interval has the max average steps?       
         #determine which row in the dataset has the highest average steps
         maxinterval <- which(ave_steps==max(ave_steps))
         #determine which interval corresponds to this row
         moststeps <- intervalsteps[maxinterval,"interval"]
 ```
-The most steps on average are taken in interval number `r moststeps`.
+The most steps on average are taken in interval number 835.
 
 
 Imputing missing values
-```{r missingvalues, echo=TRUE}
+
+```r
 #1. Calculate and report number of missing values:
 #count the number of steps "NA" values in the original dataset
         StepNAs <- sum(is.na(stepdata$steps))
@@ -94,24 +104,28 @@ imputedsteps <-
         hist(imputedsteps$daily_total_steps, main = 
         "Histogram of total steps taken per day",
         xlab = "Number of steps", ylab = "Frequency")
-        
+```
+
+![](PA1_template_files/figure-html/missingvalues-1.png)<!-- -->
+
+```r
 #...calculate the mean and median total number of steps taken per day
        MnDTS <- mean(imputedsteps$daily_total_steps)
        MdDTS <- median(imputedsteps$daily_total_steps)
        meandiff <- MnDTS - rmean
        meddiff <- MdDTS - rmedian
-
 ```
-1. There are `r StepNAs` NA values in the dataset
-4. The mean total number of daily steps taken is `r MnDTS`, the median total
-number of daily steps taken is `r MdDTS`. The difference between the mean
-with imputed values and the mean without imputed values is `r meandiff`. The 
+1. There are 2304 NA values in the dataset
+4. The mean total number of daily steps taken is 1.0766189\times 10^{4}, the median total
+number of daily steps taken is 1.0766189\times 10^{4}. The difference between the mean
+with imputed values and the mean without imputed values is 0. The 
 difference between the median with imputed values and the median without imputed 
-values is `r meddiff`. 
+values is 1.1886792. 
 
 
 Are there differences in activity patterns between weekdays and weekends?
-```{r weekdaysweekends, echo=TRUE}
+
+```r
 #1. Create a new factor variable in the dataset with two levels - 
 #"weekday" and "weekend":
 #for days containing capital S, assign them weekends, otherwise weekdays
@@ -137,3 +151,5 @@ stepdata$day = weekdays(as.Date(stepdata$date))
         plot(wkndsteps$interval,wkndsteps$mean_steps_per_interval, 
              type="l",ylab="", xlab = "Interval", main="Weekend activity")
 ```
+
+![](PA1_template_files/figure-html/weekdaysweekends-1.png)<!-- -->
